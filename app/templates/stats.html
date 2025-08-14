@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>Stats for <code>{{ base_url }}/{{ item.code }}</code></h2>
+  <p><strong>Target:</strong> <a href="{{ item.target_url }}" target="_blank">{{ item.target_url }}</a></p>
+  <ul class="stats">
+    <li>Total clicks: <strong>{{ item.click_count }}</strong></li>
+    <li>Created: <strong>{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</strong></li>
+    <li>Last accessed: <strong>{{ item.last_accessed.strftime('%Y-%m-%d %H:%M') if item.last_accessed else '—' }}</strong></li>
+    <li>Expires: <strong>{{ item.expires_at.strftime('%Y-%m-%d %H:%M') if item.expires_at else 'Never' }}</strong></li>
+    <li>Status: <strong>{{ 'Active' if item.is_active and (not item.expires_at or item.expires_at > item.created_at) else 'Inactive' }}</strong></li>
+  </ul>
+  <div class="pill">
+    <code id="short-url">{{ base_url }}/{{ item.code }}</code>
+    <button type="button" id="short-url-btn" onclick="copyToClipboard('short-url')">Copy</button>
+    <a class="button" href="/qr/{{ item.code }}" download>QR</a>
+    <a class="button" href="/">Create another</a>
+  </div>
+</section>
+{% endblock %}

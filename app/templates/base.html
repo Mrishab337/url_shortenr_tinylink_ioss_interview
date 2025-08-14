@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>URL Shortener</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="container">
+    <h1 class="brand">🔗 TinyLink</h1>
+    <nav><a href="/">Home</a></nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="container footer">
+    <p>Built with FastAPI · <a href="https://github.com/">Source</a></p>
+  </footer>
+  <script>
+    function copyToClipboard(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.innerText).then(() => {
+        const btn = document.getElementById(id + "-btn");
+        btn.innerText = "Copied!";
+        setTimeout(()=>btn.innerText = "Copy", 1200);
+      });
+    }
+  </script>
+</body>
+</html>

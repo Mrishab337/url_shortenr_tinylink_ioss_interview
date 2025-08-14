@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>Create a short link</h2>
+  <form method="post" action="/shorten" class="grid">
+    <label>
+      <span>Long URL</span>
+      <input name="url" type="url" placeholder="https://example.com/very/long/path?with=params" required>
+    </label>
+    <label>
+      <span>Custom alias (optional)</span>
+      <input name="custom_alias" type="text" placeholder="e.g. my-link">
+    </label>
+    <label>
+      <span>Expires in days (optional)</span>
+      <input name="expires_in_days" type="number" min="1" max="3650" placeholder="e.g. 30">
+    </label>
+    <div class="actions">
+      <button type="submit">Shorten</button>
+    </div>
+  </form>
+
+  {% if created_short_url %}
+  <div class="result">
+    <p>Your short URL:</p>
+    <div class="pill">
+      <code id="short-url">{{ created_short_url }}</code>
+      <button type="button" id="short-url-btn" onclick="copyToClipboard('short-url')">Copy</button>
+      <a class="button" href="/stats/{{ code }}">View stats</a>
+      <a class="button" href="/qr/{{ code }}" download>QR</a>
+    </div>
+  </div>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h3>Recent links</h3>
+  <table>
+    <thead>
+      <tr><th>Short</th><th>Target</th><th>Clicks</th><th>Created</th></tr>
+    </thead>
+    <tbody>
+      {% for r in recent %}
+      <tr>
+        <td><a href="/{{ r.code }}" target="_blank">{{ base_url }}/{{ r.code }}</a></td>
+        <td class="truncate"><a href="{{ r.target_url }}" target="_blank">{{ r.target_url }}</a></td>
+        <td>{{ r.click_count }}</td>
+        <td>{{ r.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4">No links yet. Create one above!</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
